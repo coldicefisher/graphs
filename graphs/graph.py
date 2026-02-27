@@ -128,4 +128,8 @@ class Graph:
         return g_new
     
     
-    
+    def insert_node(self, label=None) -> Node:
+        new_node: Node = Node(self.num_nodes, label)
+        self.nodes.append(new_node)
+        self.num_nodes += 1
+        return new_node
