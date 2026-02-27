@@ -1,5 +1,7 @@
 import math
 from graphs.graph import Graph
+from graphs.edge import Edge
+from graphs.node import Node
 
 
 def check_node_path_valid(g: Graph, path: list) -> bool:
@@ -48,3 +50,41 @@ def compute_path_cost_from_edges(path: list) -> float:
         prev_node = edge.to_node
         
     return cost
+
+
+
+
+def make_grid_graph(width: int, height: int) -> Graph:
+    num_nodes: int = width * height
+    g: Graph = Graph(num_nodes, undirected=True)
+    
+    for r in range(height):
+        for c in range(width):
+            index: int = r * width + c
+            
+            if (c < width - 1):
+                g.insert_edge(index, index + 1, 1.0)
+            if (r < height - 1):
+                g.insert_edge(index, index + width, 1.0)
+                
+    return g
+
+
+def make_grid_with_obstacles(width: int, height: int, obstacles: set) -> Graph:
+    num_nodes: int = width * height
+    g: Graph = Graph(num_nodes, undirected=True)
+    
+    for r in range(height):
+        for c in range(width):
+            if (r, c) not in obstacles:
+                index: int = r * width + c
+                
+                if (c < width -1) and (r, c + 1) not in obstacles:
+                    g.insert_edge(index, index + 1, 1.0)
+                if (r < height - 1) and (r + 1, c) not in obstacles:
+                    g.insert_edge(index, index + width, 1.0)
+                
+    return g
+
+
+
