@@ -86,7 +86,8 @@ def articulation_point_root(g: Graph, root: int, stats: DFSTreeStats, results: s
     if num_subtrees >= 2:
         results.add(root)
         
-        
+    
+
 def find_articulation_points(g: Graph) -> set:
     stats: DFSTreeStats = DFSTreeStats(g.num_nodes)
     results: set = set()

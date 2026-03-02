@@ -1,6 +1,6 @@
 # graphs/mst/prims.py
 
-from queue import PriorityQueue
+from graphs.core.priority_queue import PriorityQueue
 
 from graphs.core.graph import Graph
 from graphs.core.node import Node
@@ -11,6 +11,10 @@ from typing import Union
 import math
 
 
+
+    
+    
+    
 
     
 def prims(g: Graph) -> Union[list, None]:

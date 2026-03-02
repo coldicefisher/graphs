@@ -5,6 +5,95 @@ from graphs.core.priority_queue import PriorityQueue
 
 
 
+
+# def setup_basic_queue(min_heap=True):
+#     pq = PriorityQueue(size=10, min_heap=min_heap)
+
+#     # Manually populate internal state for testing
+#     # Using 1-based indexing
+#     pq.heap_array[1] = (5, "A")
+#     pq.heap_array[2] = (10, "B")
+#     pq.heap_array[3] = (3, "C")
+
+#     pq.indices = {
+#         "A": 1,
+#         "B": 2,
+#         "C": 3
+#     }
+
+#     pq.last_index = 3
+#     return pq
+
+
+
+# def test_initial_state():
+#     pq = PriorityQueue()
+
+#     assert pq.size() == 0
+#     assert pq.is_empty() is True
+#     assert pq.is_min_heap is True
+    
+    
+# def test_size_and_empty():
+#     pq = PriorityQueue()
+
+#     assert pq.is_empty() is True
+
+#     pq.last_index = 1
+#     assert pq.size() == 1
+#     assert pq.is_empty() is False
+    
+    
+    
+# def test_in_queue():
+#     pq = setup_basic_queue()
+
+#     assert pq.in_queue("A") is True
+#     assert pq.in_queue("Z") is False
+    
+    
+# def test_get_priority():
+#     pq = setup_basic_queue()
+
+#     assert pq.get_priority("A") == 5
+#     assert pq.get_priority("C") == 3
+#     assert pq.get_priority("Z") is None
+    
+    
+# def test_elements_inverted_min_heap():
+#     pq = setup_basic_queue(min_heap=True)
+
+#     # A(5) parent, C(3) child → 5 > 3 → inverted
+#     assert pq._elements_inverted(1, 3) is True
+
+#     # A(5) parent, B(10) child → 5 < 10 → not inverted
+#     assert pq._elements_inverted(1, 2) is False
+    
+    
+    
+# def test_elements_inverted_max_heap():
+#     pq = setup_basic_queue(min_heap=False)
+
+#     # A(5) parent, B(10) child → 5 < 10 → inverted
+#     assert pq._elements_inverted(1, 2) is True
+
+#     # A(5) parent, C(3) child → 5 > 3 → not inverted
+#     assert pq._elements_inverted(1, 3) is False
+
+
+
+
+# def test_elements_inverted_out_of_bounds():
+#     pq = setup_basic_queue()
+
+#     assert pq._elements_inverted(0, 1) is False
+#     assert pq._elements_inverted(1, 10) is False
+
+
+
+
+
+
 # Basic Behavior
 
 

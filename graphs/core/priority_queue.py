@@ -1,12 +1,75 @@
 # graphs/core/priority_queue.py
 
+
+
+# class PriorityQueue:
+#     def __init__(self, size: int=100, min_heap: bool=True):
+#         self.array_size: int = size
+#         self.heap_array: list = [None] * self.array_size
+#         self.last_index: int = 0
+#         self.is_min_heap: bool = min_heap
+#         self.indices: dict = {}
+        
+        
+#     def size(self) -> int:
+#         return self.last_index
+    
+    
+#     def is_empty(self) -> bool:
+#         return self.last_index == 0
+    
+#     def in_queue(self, value) -> bool:
+#         return value in self.indices
+    
+    
+#     def get_priority(self, value) -> float:
+#         if value not in self.indices:
+#             return None
+        
+#         index: int = self.indices[value]
+#         return self.heap_array[index][0]
+    
+#     def _elements_inverted(self, parent: int, child: int) -> bool:
+#         if parent < 1 or parent > self.last_index:
+#             return False
+#         if child < 1 or child > self.last_index:
+#             return False
+        
+#         if self.is_min_heap:
+#             return self.heap_array[parent] > self.heap_array[child]
+#         else:
+#             return self.heap_array[parent] < self.heap_array[child]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 import heapq
 
 
 class PriorityQueue:
     def __init__(self):
         self.heap = []
-        self.entry_finder = {}  # item -> [priority, item]
+        self.entry_finder = {} 
         self.REMOVED = "<removed>"
         self.counter = 0
 
@@ -50,42 +113,3 @@ class PriorityQueue:
     def get_priority(self, item) -> float:
         return self.entry_finder[item][0]
 
-
-
-# class PriorityQueue:
-#     def __init__(self, size: int=100, min_heap: bool=True):
-#         self.array_size: int = size
-#         self.heap_array: list = [None] * self.array_size
-#         self.last_index: int = 0
-#         self.is_min_heap: bool = min_heap
-#         self.indices: dict = {}
-        
-        
-#     def size(self) -> int:
-#         return self.last_index
-    
-    
-#     def is_empty(self) -> bool:
-#         return self.last_index == 0
-    
-#     def in_queue(self, value) -> bool:
-#         return value in self.indices
-    
-    
-#     def get_priority(self, value) -> float:
-#         if value not in self.indices:
-#             return None
-        
-#         index: int = self.indices[value]
-#         return self.heap_array[index][0]
-    
-#     def _elements_inverted(self, parent: int, child: int) -> bool:
-#         if parent < 1 or parent > self.last_index:
-#             return False
-#         if child < 1 or child > self.last_index:
-#             return False
-        
-#         if self.is_min_heap:
-#             return self.heap_array[parent] > self.heap_array[child]
-#         else:
-#             return self.heap_array[parent] < self.heap_array[child]

@@ -1,0 +1,38 @@
+Graph has 20 nodes and 72 edges.
+Graph is connected.
+
+********************
+Bridges in the graph:
+6 -> 2
+11 -> 19
+17 -> 11
+
+********************
+Articulation Points:
+4
+6
+11
+17
+
+********************
+Minimum Spanning Tree Edges:
+7 -> 0 (weight=1.0)
+8 -> 0 (weight=1.0)
+15 -> 0 (weight=1.0)
+18 -> 0 (weight=1.0)
+1 -> 15 (weight=1.0)
+5 -> 15 (weight=1.0)
+6 -> 18 (weight=1.0)
+17 -> 18 (weight=1.0)
+10 -> 1 (weight=1.0)
+13 -> 1 (weight=1.0)
+2 -> 6 (weight=1.0)
+4 -> 17 (weight=1.0)
+11 -> 17 (weight=1.0)
+3 -> 4 (weight=1.0)
+9 -> 4 (weight=1.0)
+12 -> 4 (weight=1.0)
+19 -> 11 (weight=1.0)
+14 -> 3 (weight=1.0)
+16 -> 3 (weight=1.0)
+Total MST Weight: 19.0
