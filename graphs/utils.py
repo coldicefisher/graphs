@@ -1,38 +1,45 @@
+# graphs/utils.py
+
 import math
-from graphs.graph import Graph
-from graphs.edge import Edge
-from graphs.node import Node
+from graphs.core.graph import Graph
+from graphs.core.edge import Edge
+from graphs.core.node import Node
 
 
 def check_node_path_valid(g: Graph, path: list) -> bool:
-    num_nodes_on_path: int = len(path)
-    if num_nodes_on_path == 0:
+    if len(path) == 0:
         return True
-    
-    prev_node: int = path[0]
-    if prev_node < 0 or prev_node >= g.num_nodes:
-        return False
+
+    for i in range(1, len(path)):
+        if not g.is_edge(path[i - 1], path[i]):
+            return False
+
+    return True
 
     
 def make_node_path_from_last(last: list, dest: int) -> list:
     result: list = []
-    for node in last:
-        result.append(node)
-        if node == dest:
-            break
+    current: int = dest
+
+    while current != -1:
+        result.append(current)
+        current = last[current]
+
+    result.reverse()
     return result
+
 
 
 def check_last_path_valid(g: Graph, last: list) -> bool:
     if len(last) != g.num_nodes:
         return False
-    
+
     for to_node, from_node in enumerate(last):
         if from_node != -1 and not g.is_edge(from_node, to_node):
             return False
-        
-        return True
-    
+
+    return True
+
     
 def compute_path_cost_from_edges(path: list) -> float:
     if len(path) == 0:
@@ -88,3 +95,7 @@ def make_grid_with_obstacles(width: int, height: int, obstacles: set) -> Graph:
 
 
 
+
+
+def euclidean_dist(x1: float, y1: float, x2: float, y2: float) -> float:
+    return math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))

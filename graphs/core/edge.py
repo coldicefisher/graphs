@@ -1,5 +1,7 @@
 
 
+# graphs/edge.py
+
 class Edge:
     def __init__(self, from_node: int, to_node: int, weight: float):
         self.from_node: int = from_node

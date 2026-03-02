@@ -1,0 +1,30 @@
+# Structure
+
+- graphs
+  - utils.py
+  - world.py
+  - clustering
+    - single_linkage.py
+  - core
+    - edge.py
+    - graph_matrix.py
+    - graph.py
+    - node.py
+    - union_find.py
+  - metrics
+    - diameter.py
+  - mst
+    - kruskals.py
+    - prims.py
+  - puzzles
+    - prisoners_guards.py
+  - shortest_paths
+    - astar.py
+    - bellman_ford.py
+    - dijkstra.py
+    - floyd_warshall.py
+    - informed_search.py
+  - traversal
+    - bfs_search.py
+    - dfs_search.py
+

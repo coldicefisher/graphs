@@ -1,9 +1,10 @@
+# graphs/bfs_search.py
 import queue
 
-from graphs.graph import Graph
-from graphs.node import Node
+from graphs.core.graph import Graph
+from graphs.core.node import Node
 from graphs.utils import make_node_path_from_last
-from graphs.edge import Edge
+from graphs.core.edge import Edge
 
 
 def breadth_first_search(g: Graph, start: int) -> list:

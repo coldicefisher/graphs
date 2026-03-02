@@ -1,14 +1,14 @@
 import pytest
 
-from graphs.graph import Graph
-from graphs.graph_matrix import GraphMatrix
-from graphs.node import Node
-from graphs.edge import Edge
+from graphs.core.graph import Graph
+from graphs.core.graph_matrix import GraphMatrix
+from graphs.core.node import Node
+from graphs.core.edge import Edge
 
 
-# ==========================
+
 # GraphMatrix Tests
-# ==========================
+
 
 def test_graph_matrix_initialization():
     g = GraphMatrix(3)
@@ -47,9 +47,9 @@ def test_graph_matrix_invalid_index():
         g.set_edge(4, 0, 1.0)
 
 
-# ==========================
+
 # Node Tests
-# ==========================
+
 
 def test_node_add_and_get_edge():
     n = Node(0)
@@ -83,9 +83,9 @@ def test_node_sorted_edge_list():
     assert neighbors == [1, 2, 3]
 
 
-# ==========================
+
 # Graph Tests
-# ==========================
+
 
 def test_graph_initialization():
     g = Graph(4)
@@ -164,9 +164,9 @@ def test_graph_invalid_index():
         g.remove_edge(0, 10)
 
 
-# ==========================
+
 # Deep Copy Tests
-# ==========================
+
 
 def test_make_copy_structure():
     g = Graph(3, undirected=True)

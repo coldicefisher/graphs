@@ -1,5 +1,7 @@
-from graphs.node import Node
-from graphs.edge import Edge
+# graphs/graph.py
+
+from graphs.core.node import Node
+from graphs.core.edge import Edge
 
 from typing import Union
 
@@ -60,7 +62,8 @@ class Graph:
         for node in self.nodes:
             g2.nodes[node.index].label = node.label
             for edge in node.edges.values():
-                g2.insert_edge(edge.from_node, edge.to_node, edge.weight)
+                if not self.undirected or edge.to_node > edge.from_node:
+                    g2.insert_edge(edge.from_node, edge.to_node, edge.weight)
                 
         return g2
     
@@ -76,6 +79,11 @@ class Graph:
     
     
     def clustering_coefficient(self, node_index: int) -> float:
+        
+        
+        if not self.undirected:
+            raise ValueError("Graph must be undirected")
+        
         neighbors: set = self.nodes[node_index].get_neighbors()
         num_neighbors: int = len(neighbors)
         
@@ -97,7 +105,7 @@ class Graph:
         for n in range(self.num_nodes):
             total += self.clustering_coefficient(n)
             
-        if self.nodes == 0:
+        if self.num_nodes == 0:
             return 0.0
         
         return total / self.num_nodes

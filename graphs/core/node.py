@@ -1,6 +1,8 @@
+# graphs/node.py
+
 from typing import Union
 
-from graphs.edge import Edge
+from graphs.core.edge import Edge
 
 class Node:
     def __init__(self, index: int, label=None):

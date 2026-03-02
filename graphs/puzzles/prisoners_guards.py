@@ -1,12 +1,15 @@
-
-from typing import Union
+# graphs/puzzles/prisoners_guards.py
+import math
 import queue
 
-from graphs.graph import Graph
-from graphs.node import Node
-from graphs.edge import Edge
+from graphs.core.graph import Graph
+from graphs.core.node import Node
+from graphs.core.edge import Edge
 
-from graphs.bfs_search import breadth_first_search
+from graphs.traversal.bfs_search import breadth_first_search
+
+from typing import Union
+
 
 class PGState:
     def __init__(self, guards_left: int = 3, prisoners_left: int = 3, boat_side: str = "L"):
@@ -133,3 +136,25 @@ def solve_pg_bfs():
     
     for i, n in enumerate(reversed(path_reversed)):
         print(f"Step {i}: {g.nodes[n].label}")
+        
+        
+
+
+                
+
+
+def pq_generate_heuristic(g: Graph) -> list:
+    heuristic = [0.0] * g.num_nodes
+    for node in g.nodes:
+        state: PGState = node.label
+        num_left: int = state.guards_left + state.prisoners_left
+        min_trips_1_to_r: int = math.ceil(num_left / 2.0)
+        min_trips_r_to_1: int = max(0, min_trips_1_to_r - 1)
+        if not state.boat_side == "L" and min_trips_1_to_r > 0:
+            min_trips_r_to_1 += 1
+        heuristic[node.index] = min_trips_1_to_r + min_trips_r_to_1
+        
+    return heuristic
+
+
+

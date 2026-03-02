@@ -1,6 +1,8 @@
 
-from graphs.graph import Graph
-from graphs.node import Node
+# graphs/dfs_search.py
+
+from graphs.core.graph import Graph
+from graphs.core.node import Node
 
 
 def dfs_recursive_basic(g: Graph, ind: int, seen: list):
@@ -18,7 +20,8 @@ def dfs_recursive_basic(g: Graph, ind: int, seen: list):
 def depth_first_search_basic(g: Graph, start: int) -> list:
     seen: list = [False] * g.num_nodes
     dfs_recursive_basic(g, start, seen)
-    
+    return seen
+
     
 def depth_first_basic_all(g: Graph) -> list:
     seen: list = [False] * g.num_nodes
@@ -27,6 +30,7 @@ def depth_first_basic_all(g: Graph) -> list:
         if not seen[ind]:
             dfs_recursive_basic(g, ind, seen)
             
+    return seen
             
             
 def dfs_recursive_path(g: Graph, ind: int, seen: list, last: list):
@@ -55,24 +59,26 @@ def depth_first_search_path(g: Graph) -> list:
 def depth_first_search_stack(g: Graph, start: int) -> list:
     seen: list = [False] * g.num_nodes
     last: list = [-1] * g.num_nodes
-    
+
     to_explore: list = [start]
-    to_explore.append(start)
-    
+
     while to_explore:
         ind: int = to_explore.pop()
+
         if not seen[ind]:
-            current: Node = g.nodes[ind]
             seen[ind] = True
-            
-            all_edges: list = current.get_edge_list()
+            current: Node = g.nodes[ind]
+
+            all_edges = current.get_edge_list()
             all_edges.reverse()
+
             for edge in all_edges:
                 neighbor: int = edge.to_node
                 if not seen[neighbor]:
                     last[neighbor] = ind
                     to_explore.append(neighbor)
-                    
+
+    return last                    
                     
                     
                     
@@ -98,3 +104,29 @@ def dfs_connected_components(g: Graph) -> list:
             curr_comp = curr_comp + 1
             
     return component
+
+
+            
+def topological_dfs(g: Graph) -> list:
+    seen: list = [False] * g.num_nodes
+    s: list = []
+    for ind in range(g.num_nodes):
+        if not seen[ind]:
+            topological_dfs_recursive(g, ind, seen, s)
+    
+    s.reverse()
+    return s
+
+
+
+def topological_dfs_recursive(g: Graph, ind: int, seen: list, s: list):
+    seen[ind] = True
+    current: Node = g.nodes[ind]
+    for edge in current.get_edge_list():
+        neighbor: int = edge.to_node
+        if not seen[neighbor]:
+            topological_dfs_recursive(g, neighbor, seen, s)
+    
+    s.append(ind)
+    
+    

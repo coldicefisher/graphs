@@ -1,5 +1,7 @@
 
 
+# graphs/graph_matrix.py
+
 class GraphMatrix:
     def __init__(self, num_nodes: int, undirected: bool=False):
         self.num_nodes: int = num_nodes
