@@ -2,7 +2,7 @@
 
 import pytest
 from graphs.core.graph import Graph
-from graphs.traversal.bfs_search import breadth_first_search
+from graphs.traversal.bfs_search import breadth_first_search, make_grid_graph
 from graphs.utils import check_last_path_valid, make_node_path_from_last
 
 
@@ -114,3 +114,14 @@ def test_bfs_single_node():
     last = breadth_first_search(g, 0)
 
     assert last == [-1]
+
+
+# make_grid_graph (in bfs_search module)
+
+def test_bfs_make_grid_graph():
+    g = make_grid_graph(3, 2)
+    assert g.num_nodes == 6
+    assert g.undirected is True
+    assert g.is_edge(0, 1)
+    assert g.is_edge(0, 3)
+    assert not g.is_edge(2, 3)  # no row wrap

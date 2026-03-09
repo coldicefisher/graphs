@@ -198,3 +198,122 @@ def test_make_copy_independent():
     # Copy should remain unchanged
     assert g.get_edge(0, 1) is None
     assert g2.get_edge(0, 1) is not None
+
+
+# get_in_neighbors
+
+def test_get_in_neighbors():
+    g = Graph(3)
+    g.insert_edge(0, 2, 1.0)
+    g.insert_edge(1, 2, 1.0)
+    neighbors = g.get_in_neighbors(2)
+    assert neighbors == {0, 1}
+
+
+# clustering_coefficient
+
+def test_clustering_coefficient_triangle():
+    g = Graph(3, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(1, 2, 1.0)
+    g.insert_edge(0, 2, 1.0)
+    assert g.clustering_coefficient(0) == 1.0
+
+
+def test_clustering_coefficient_no_edges_between_neighbors():
+    g = Graph(3, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(0, 2, 1.0)
+    assert g.clustering_coefficient(0) == 0.0
+
+
+def test_clustering_coefficient_single_neighbor():
+    g = Graph(2, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    assert g.clustering_coefficient(0) == 0.0
+
+
+def test_clustering_coefficient_directed_raises():
+    g = Graph(3)
+    with pytest.raises(ValueError):
+        g.clustering_coefficient(0)
+
+
+# average_clustering_coefficient
+
+def test_average_clustering_coefficient():
+    g = Graph(3, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(1, 2, 1.0)
+    g.insert_edge(0, 2, 1.0)
+    avg = g.average_clustering_coefficient()
+    assert avg == 1.0
+
+
+def test_average_clustering_coefficient_empty():
+    g = Graph(0, undirected=True)
+    assert g.average_clustering_coefficient() == 0.0
+
+
+# make_undirected_neighborhood_subgraph
+
+def test_neighborhood_subgraph_closed():
+    g = Graph(4, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(0, 2, 1.0)
+    g.insert_edge(1, 2, 1.0)
+    g.insert_edge(2, 3, 1.0)
+
+    sub = g.make_undirected_neighborhood_subgraph(0, closed=True)
+    assert sub.num_nodes == 3  # nodes 0, 1, 2
+
+
+def test_neighborhood_subgraph_open():
+    g = Graph(4, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(0, 2, 1.0)
+    g.insert_edge(1, 2, 1.0)
+
+    sub = g.make_undirected_neighborhood_subgraph(0, closed=False)
+    assert sub.num_nodes == 2  # nodes 1, 2 only
+
+
+def test_neighborhood_subgraph_directed_raises():
+    g = Graph(3)
+    with pytest.raises(ValueError):
+        g.make_undirected_neighborhood_subgraph(0, closed=True)
+
+
+# insert_node
+
+def test_insert_node():
+    g = Graph(2)
+    new_node = g.insert_node(label="new")
+    assert g.num_nodes == 3
+    assert new_node.index == 2
+    assert new_node.label == "new"
+
+
+# Node.get_out_neighbors
+
+def test_node_get_out_neighbors():
+    n = Node(0)
+    n.add_edge(1, 1.0)
+    n.add_edge(2, 1.0)
+    assert n.get_out_neighbors() == {1, 2}
+
+
+# Node.remove_edge nonexistent
+
+def test_node_remove_nonexistent_edge():
+    n = Node(0)
+    n.remove_edge(99)  # should not raise
+    assert n.num_edges() == 0
+
+
+# Graph.remove_edge to_node bounds check
+
+def test_remove_edge_invalid_to_node():
+    g = Graph(3)
+    with pytest.raises(IndexError):
+        g.remove_edge(-1, 0)

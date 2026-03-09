@@ -1,115 +1,106 @@
 # graphs/core/priority_queue.py
-
-
-
-# class PriorityQueue:
-#     def __init__(self, size: int=100, min_heap: bool=True):
-#         self.array_size: int = size
-#         self.heap_array: list = [None] * self.array_size
-#         self.last_index: int = 0
-#         self.is_min_heap: bool = min_heap
-#         self.indices: dict = {}
-        
-        
-#     def size(self) -> int:
-#         return self.last_index
-    
-    
-#     def is_empty(self) -> bool:
-#         return self.last_index == 0
-    
-#     def in_queue(self, value) -> bool:
-#         return value in self.indices
-    
-    
-#     def get_priority(self, value) -> float:
-#         if value not in self.indices:
-#             return None
-        
-#         index: int = self.indices[value]
-#         return self.heap_array[index][0]
-    
-#     def _elements_inverted(self, parent: int, child: int) -> bool:
-#         if parent < 1 or parent > self.last_index:
-#             return False
-#         if child < 1 or child > self.last_index:
-#             return False
-        
-#         if self.is_min_heap:
-#             return self.heap_array[parent] > self.heap_array[child]
-#         else:
-#             return self.heap_array[parent] < self.heap_array[child]
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-import heapq
+# Based on the binary heap priority queue from
+# "Graph Algorithms the Fun Way" by Jeremy Kubica
 
 
 class PriorityQueue:
-    def __init__(self):
-        self.heap = []
-        self.entry_finder = {} 
-        self.REMOVED = "<removed>"
-        self.counter = 0
+    def __init__(self, size=100, min_heap=True):
+        self.array_size = size
+        self.heap_array = [None] * self.array_size
+        self.last_index = 0
+        self.is_min_heap = min_heap
+        self.indices = {}
 
-    def enqueue(self, item, priority: float):
-        if item in self.entry_finder:
-            self.update_priority(item, priority)
+    def size(self):
+        return self.last_index
+
+    def is_empty(self):
+        return self.last_index == 0
+
+    def in_queue(self, value):
+        return value in self.indices
+
+    def get_priority(self, value):
+        if value not in self.indices:
+            return None
+        index = self.indices[value]
+        return self.heap_array[index][0]
+
+    def _elements_inverted(self, parent, child):
+        if parent < 1 or parent > self.last_index:
+            return False
+        if child < 1 or child > self.last_index:
+            return False
+        if self.is_min_heap:
+            return self.heap_array[parent][0] > self.heap_array[child][0]
+        else:
+            return self.heap_array[parent][0] < self.heap_array[child][0]
+
+    def _swap(self, i1, i2):
+        self.indices[self.heap_array[i1][1]] = i2
+        self.indices[self.heap_array[i2][1]] = i1
+        self.heap_array[i1], self.heap_array[i2] = self.heap_array[i2], self.heap_array[i1]
+
+    def _heapify_up(self, index):
+        parent = index // 2
+        while parent >= 1 and self._elements_inverted(parent, index):
+            self._swap(parent, index)
+            index = parent
+            parent = index // 2
+
+    def _heapify_down(self, index):
+        while 2 * index <= self.last_index:
+            child = 2 * index
+            if child + 1 <= self.last_index and self._elements_inverted(child, child + 1):
+                child = child + 1
+            if self._elements_inverted(index, child):
+                self._swap(index, child)
+                index = child
+            else:
+                break
+
+    def enqueue(self, value, priority):
+        if value in self.indices:
+            self.update_priority(value, priority)
             return
-
-        entry = [priority, self.counter, item]
-        self.counter += 1
-        self.entry_finder[item] = entry
-        heapq.heappush(self.heap, entry)
-
-    def update_priority(self, item, priority: float):
-        if item not in self.entry_finder:
-            self.enqueue(item, priority)
-            return
-
-        old_entry = self.entry_finder.pop(item)
-        old_entry[-1] = self.REMOVED
-
-        new_entry = [priority, self.counter, item]
-        self.counter += 1
-        self.entry_finder[item] = new_entry
-        heapq.heappush(self.heap, new_entry)
+        self.last_index += 1
+        if self.last_index >= self.array_size:
+            self.heap_array.extend([None] * self.array_size)
+            self.array_size *= 2
+        self.heap_array[self.last_index] = (priority, value)
+        self.indices[value] = self.last_index
+        self._heapify_up(self.last_index)
 
     def dequeue(self):
-        while self.heap:
-            priority, _, item = heapq.heappop(self.heap)
-            if item is not self.REMOVED:
-                del self.entry_finder[item]
-                return item
-        raise KeyError("pop from empty priority queue")
+        if self.is_empty():
+            raise KeyError("dequeue from empty priority queue")
+        result = self.heap_array[1][1]
+        del self.indices[result]
+        if self.last_index > 1:
+            self.heap_array[1] = self.heap_array[self.last_index]
+            self.indices[self.heap_array[1][1]] = 1
+            self.heap_array[self.last_index] = None
+            self.last_index -= 1
+            self._heapify_down(1)
+        else:
+            self.heap_array[1] = None
+            self.last_index = 0
+        return result
 
-    def is_empty(self) -> bool:
-        return not self.entry_finder
-
-    def in_queue(self, item) -> bool:
-        return item in self.entry_finder
-
-    def get_priority(self, item) -> float:
-        return self.entry_finder[item][0]
-
+    def update_priority(self, value, priority):
+        if value not in self.indices:
+            self.enqueue(value, priority)
+            return
+        index = self.indices[value]
+        old_priority = self.heap_array[index][0]
+        self.heap_array[index] = (priority, value)
+        if self.is_min_heap:
+            if priority < old_priority:
+                self._heapify_up(index)
+            else:
+                self._heapify_down(index)
+        else:
+            if priority > old_priority:
+                self._heapify_up(index)
+            else:
+                self._heapify_down(index)

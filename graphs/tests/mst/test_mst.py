@@ -1,136 +1,131 @@
-# # tests/mst/test_mst.py
+# tests/mst/test_mst.py
 
-# import pytest
-# from graphs.core.graph import Graph
-# from graphs.mst.kruskals import kruskals
-# from graphs.mst.prims import prims
-
-
-# 
-# # Helper Graph Builders
-# 
-
-# def make_simple_graph():
-#     #   0
-#     #  / \
-#     # 1---2
-#     #
-#     # edges:
-#     # 0-1 (1)
-#     # 1-2 (2)
-#     # 0-2 (3)
-#     g = Graph(3, undirected=True)
-#     g.insert_edge(0, 1, 1.0)
-#     g.insert_edge(1, 2, 2.0)
-#     g.insert_edge(0, 2, 3.0)
-#     return g
+import pytest
+from graphs.core.graph import Graph
+from graphs.mst.kruskals import kruskals, randomized_kruskals
+from graphs.mst.prims import prims
 
 
-# def make_square_graph():
-#     # 0--1
-#     # |  |
-#     # 3--2
-#     g = Graph(4, undirected=True)
-#     g.insert_edge(0, 1, 1.0)
-#     g.insert_edge(1, 2, 1.0)
-#     g.insert_edge(2, 3, 1.0)
-#     g.insert_edge(3, 0, 1.0)
-#     return g
+# Helper Graph Builders
+
+def make_simple_graph():
+    #   0
+    #  / \
+    # 1---2
+    # edges: 0-1 (1), 1-2 (2), 0-2 (3)
+    g = Graph(3, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(1, 2, 2.0)
+    g.insert_edge(0, 2, 3.0)
+    return g
 
 
-# def make_disconnected_graph():
-#     g = Graph(4, undirected=True)
-#     g.insert_edge(0, 1, 1.0)
-#     g.insert_edge(2, 3, 1.0)
-#     return g
+def make_square_graph():
+    # 0--1
+    # |  |
+    # 3--2
+    g = Graph(4, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(1, 2, 2.0)
+    g.insert_edge(2, 3, 3.0)
+    g.insert_edge(3, 0, 4.0)
+    return g
 
 
-# 
-# # Kruskal Tests
-# 
-
-# def test_kruskals_simple_graph():
-#     g = make_simple_graph()
-
-#     mst = kruskals(g)
-
-#     assert mst is not None
-#     assert len(mst) == g.num_nodes - 1
-
-#     total_weight = sum(edge.weight for edge in mst)
-#     assert total_weight == 3.0  # 1 + 2
+def make_disconnected_graph():
+    g = Graph(4, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(2, 3, 1.0)
+    return g
 
 
-# def test_kruskals_square_graph():
-#     g = make_square_graph()
+# Kruskal Tests
 
-#     mst = kruskals(g)
+def test_kruskals_simple_graph():
+    g = make_simple_graph()
+    mst = kruskals(g)
 
-#     assert mst is not None
-#     assert len(mst) == g.num_nodes - 1
+    assert mst is not None
+    assert len(mst) == g.num_nodes - 1
 
-#     total_weight = sum(edge.weight for edge in mst)
-#     assert total_weight == 3.0
-
-
-# def test_kruskals_disconnected_returns_none():
-#     g = make_disconnected_graph()
-
-#     mst = kruskals(g)
-
-#     assert mst is None
+    total_weight = sum(edge.weight for edge in mst)
+    assert total_weight == 3.0
 
 
-# 
-# # Prim's Tests
-# 
+def test_kruskals_square_graph():
+    g = make_square_graph()
+    mst = kruskals(g)
 
-# def test_prims_simple_graph():
-#     g = make_simple_graph()
+    assert mst is not None
+    assert len(mst) == g.num_nodes - 1
 
-#     mst = prims(g)
-
-#     assert mst is not None
-#     assert len(mst) == g.num_nodes - 1
-
-#     total_weight = sum(edge.weight for edge in mst)
-#     assert total_weight == 3.0
+    total_weight = sum(edge.weight for edge in mst)
+    assert total_weight == 6.0  # 1 + 2 + 3
 
 
-# def test_prims_square_graph():
-#     g = make_square_graph()
-
-#     mst = prims(g)
-
-#     assert mst is not None
-#     assert len(mst) == g.num_nodes - 1
-
-#     total_weight = sum(edge.weight for edge in mst)
-#     assert total_weight == 3.0
+def test_kruskals_disconnected_returns_none():
+    g = make_disconnected_graph()
+    mst = kruskals(g)
+    assert mst is None
 
 
-# def test_prims_disconnected_returns_none():
-#     g = make_disconnected_graph()
+# Prim's Tests
 
-#     mst = prims(g)
+def test_prims_simple_graph():
+    g = make_simple_graph()
+    mst = prims(g)
 
-#     assert mst is None
+    assert mst is not None
+    assert len(mst) == g.num_nodes - 1
+
+    total_weight = sum(edge.weight for edge in mst)
+    assert total_weight == 3.0
 
 
-# 
-# # Consistency Check
-# 
+def test_prims_square_graph():
+    g = make_square_graph()
+    mst = prims(g)
 
-# def test_prims_and_kruskals_same_weight():
-#     g = make_simple_graph()
+    assert mst is not None
+    assert len(mst) == g.num_nodes - 1
 
-#     mst_k = kruskals(g)
-#     mst_p = prims(g)
+    total_weight = sum(edge.weight for edge in mst)
+    assert total_weight == 6.0
 
-#     assert mst_k is not None
-#     assert mst_p is not None
 
-#     weight_k = sum(e.weight for e in mst_k)
-#     weight_p = sum(e.weight for e in mst_p)
+def test_prims_disconnected_returns_none():
+    g = make_disconnected_graph()
+    mst = prims(g)
+    assert mst is None
 
-#     assert weight_k == weight_p
+
+# Consistency Check
+
+def test_prims_and_kruskals_same_weight():
+    g = make_simple_graph()
+
+    mst_k = kruskals(g)
+    mst_p = prims(g)
+
+    assert mst_k is not None
+    assert mst_p is not None
+
+    weight_k = sum(e.weight for e in mst_k)
+    weight_p = sum(e.weight for e in mst_p)
+
+    assert weight_k == weight_p
+
+
+# Randomized Kruskal's
+
+def test_randomized_kruskals_spanning_tree():
+    g = Graph(4, undirected=True)
+    g.insert_edge(0, 1, 1.0)
+    g.insert_edge(1, 2, 1.0)
+    g.insert_edge(2, 3, 1.0)
+    g.insert_edge(0, 3, 1.0)
+    g.insert_edge(0, 2, 1.0)
+
+    maze = randomized_kruskals(g)
+    # Should produce a spanning tree with n-1 edges
+    assert len(maze) == g.num_nodes - 1
