@@ -1,0 +1,4 @@
+Dataset,random,uncertainty,max_degree
+Two Moons,0.9514,0.9961,0.9374
+Concentric Circles,0.9503,1.0000,0.9037
+Gaussian Blobs,1.0000,1.0000,1.0000
